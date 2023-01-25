@@ -26,7 +26,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordencoder;
 
 
-
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordencoder) {
         this.userRepository = userRepository;
@@ -66,7 +65,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void update(User updatedUser) {
-        if (!updatedUser.getPassword().equals(getUserById(updatedUser.getId()).getPassword())){
+        if (!updatedUser.getPassword().equals(getUserById(updatedUser.getId()).getPassword())) {
             updatedUser.setPassword(passwordencoder.encode(updatedUser.getPassword()));
         }
         userRepository.save(updatedUser);
@@ -79,13 +78,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findByUsername(String username){
+    public User findByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         return user.orElse(null);
     }
 
     @Override
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .map(user -> new org.springframework.security.core.userdetails.User(
