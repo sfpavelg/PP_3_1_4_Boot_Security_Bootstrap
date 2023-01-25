@@ -3,7 +3,28 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+        <style>
+            .btn-primary {
+                background-color: rgb(23, 162, 184);
+                border-color: rgb(23, 162, 184);
+            }
+            .nav-link.btn-primary,
+            .modal-footer .btn-primary {
+                background-color: #0062cc;
+                border-color: #005cbf;
+            }
+            input.form-control:-webkit-autofill {
+                -webkit-box-shadow: 0 0 0px 1000px rgb(255, 235, 153) inset;
+            }
+            .nav .nav-link.btn {
+                color: #007bff;
+            }
+        </style>
+
         <title>Admin page</title>
     </head>
     <body>
@@ -26,7 +47,8 @@
                 <div class="col-2  p-0" style="height: 93vh" >
                     <nav class="nav flex-column pt-3">
                         <a class="nav-link active btn btn-primary" style="text-align: left" href="#">Admin</a>
-                        <a sec:authorize="hasRole('ROLE_USER')" class="nav-link btn" style="text-align: left; background-color: white" href="/user">User</a>
+                        <a sec:authorize="hasRole('USER')" class="nav-link btn" style="text-align: left; background-color: white" href="/user">User</a>
+<!--                        <a class="nav-link btn" style="text-align: left; background-color: white" href="#">User</a>-->
                     </nav>
                 </div>
     <!--            Основная страница-->
@@ -36,7 +58,7 @@
     <!--            Табы-->
                         <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">User's table</a>
+                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Users table</a>
                                 <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">New User</a>
                             </div>
                         </nav>
@@ -51,12 +73,12 @@
                                         <table class="table table-striped" style="background-color: white">
                                                 <thead>
                                                     <tr>
-                                                        <th>Id</th>
-                                                        <th>Name</th>
-                                                        <th>Surname</th>
+                                                        <th>ID</th>
+                                                        <th>First Name</th>
+                                                        <th>Last Name</th>
                                                         <th>Age</th>
-                                                        <th>E-mail</th>
-                                                        <th>Roles</th>
+                                                        <th>Email</th>
+                                                        <th>Role</th>
                                                         <th>Edit</th>
                                                         <th>Delete</th>
                                                     </tr>
@@ -94,15 +116,15 @@
                                                                         <div class="row justify-content-center text-center font-weight-bold my-3" >
                                                                             <div class="modal-body  col-6 ">
                                                                                     <div class="form-group">
-                                                                                        <label for="idE">Id</label>
+                                                                                        <label for="idE">ID</label>
                                                                                         <input type="text" class="form-control" id="idE" name="id" th:value="${user.getId()}" disabled>
                                                                                     </div>
                                                                                     <div class="form-group">
-                                                                                        <label for="nameE">Name</label>
+                                                                                        <label for="nameE">First Name</label>
                                                                                         <input type="text" class="form-control" id="nameE" name="name" th:value="${user.getName()}" required>
                                                                                     </div>
                                                                                     <div class="form-group">
-                                                                                        <label for="lastNameE">Last name</label>
+                                                                                        <label for="lastNameE">Last Name</label>
                                                                                         <input type="text" class="form-control" id="lastNameE" name="surname" th:value="${user.getSurname()}" required>
                                                                                     </div>
                                                                                     <div class="form-group">
@@ -118,7 +140,7 @@
                                                                                         <input type="password" class="form-control" id="passwordE" name="password" th:value="${user.getPassword()}" required>
                                                                                     </div>
                                                                                     <div class="form-group">
-                                                                                        <label for="selectRolesE">Roles</label>
+                                                                                        <label for="selectRolesE">Role</label>
                                                                                         <select multiple class="form-control" id="selectRolesE" name="roles" size="2" required>
                                                                                             <option th:each="role:${listRoles}"
                                                                                                     th:text="${role.name.substring(5)}"
@@ -143,7 +165,7 @@
                                                             <div class="modal-dialog" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" id="deleteModalLabel">Delete</h5>
+                                                                        <h5 class="modal-title" id="deleteModalLabel">Delete user</h5>
                                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                             <span aria-hidden="true">×</span>
                                                                         </button>
@@ -152,11 +174,15 @@
                                                                     <div class="row justify-content-center text-center font-weight-bold my-3">
                                                                             <div class="modal-body  col-6 ">
                                                                                 <div class="form-group">
-                                                                                    <label for="firstNameD">First name</label>
+                                                                                    <label for="firstNameD">ID</label>
+                                                                                    <input type="text" class="form-control" id="idD" th:value="${user.getId()}" disabled>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="firstNameD">First Name</label>
                                                                                     <input type="text" class="form-control" id="firstNameD" th:value="${user.getName()}" disabled>
                                                                                 </div>
                                                                                 <div class="form-group">
-                                                                                    <label for="lastNameD">Last name</label>
+                                                                                    <label for="lastNameD">Last Name</label>
                                                                                     <input type="text" class="form-control" id="lastNameD" th:value="${user.getSurname()}" disabled>
                                                                                 </div>
                                                                                 <div class="form-group">
@@ -168,7 +194,7 @@
                                                                                     <input type="email" class="form-control" id="emailD" th:value="${user.getUsername()}" disabled>
                                                                                 </div>
                                                                                 <div class="form-group">
-                                                                                    <label for="selectRolesD">Roles</label>
+                                                                                    <label for="selectRolesD">Role</label>
                                                                                     <select multiple class="form-control" id="selectRolesD" name="roles" size="2" disabled>
                                                                                         <option th:each="role:${user.getRoles()}"
                                                                                                 th:text="${role.name.substring(5)}"
@@ -217,7 +243,7 @@
                                                             <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Password" required>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="selectRoles">Roles</label>
+                                                            <label for="selectRoles">Role</label>
                                                             <select multiple  id="selectRoles" class="form-control" size="2" name="roles" required>
                                                                 <option th:each="role:${listRoles}"
                                                                         th:text="${role.name.substring(5)}"
